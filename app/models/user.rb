@@ -15,6 +15,8 @@ class User < ApplicationRecord
   #validates :password, length: {minimum: 7}
   validates_confirmation_of :password
 
+  has_many :projects, dependent: :destroy
+
   def generate_authentication_token!
     begin
       self.auth_token = Devise.friendly_token

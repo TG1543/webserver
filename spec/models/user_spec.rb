@@ -12,6 +12,8 @@ describe User do
   it { should validate_uniqueness_of(:auth_token)}
   it { should be_valid }
 
+  it { should have_many(:projects) }
+
   describe "when email is not present" do
     before { @user.email = " " }
     it { should_not be_valid }
@@ -32,5 +34,21 @@ describe User do
       expect(@user.auth_token).not_to eql existing_user.auth_token
     end
   end
-  
+
+  describe "#projects association" do
+
+   before do
+     @user.save
+     3.times { FactoryGirl.create :project, user: @user }
+   end
+
+   it "destroys the associated products on self destruct" do
+     projects = @user.projects
+     @user.destroy
+     projects.each do |product|
+       expect(Project.find(product)).to raise_error ActiveRecord::RecordNotFound
+     end
+   end
+ end
+
 end

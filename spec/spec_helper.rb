@@ -18,6 +18,8 @@ ActiveRecord::Migration.maintain_test_schema!
 
 RSpec.configure do |config|
   config.include ApplicationHelper
+  config.include Request::JsonHelpers, :type => :controller
+  config.include Devise::TestHelpers, :type => :controller
   #config.include(Shoulda::Matchers::ActionController, { type: :model, file_path: /spec\/controllers/})
   # ## Mock Framework
   #

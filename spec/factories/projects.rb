@@ -1,6 +1,7 @@
 FactoryGirl.define do
   factory :project do
     name { FFaker::Product.product_name }
-    description { FFaker::Product.describe }
+    description { "description #{name}" }
+    user
   end
 end

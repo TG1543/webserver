@@ -1,5 +1,5 @@
 class Api::V1::ProjectsController < ApplicationController
-  before_action :authenticate_with_token!, only: [:create]
+  before_action :authenticate_with_token!, only: [:create, :index, :show]
   respond_to :json
 
  def show
@@ -20,9 +20,23 @@ class Api::V1::ProjectsController < ApplicationController
     end
   end
 
+  def update
+    project = current_user.projects.find(params[:id])
+    if project.update(project_params)
+      render json: project, status: 200, location: [:api, project]
+    else
+      render json: { errors: project.errors }, status: 422
+    end
+  end
+
+
+
+
   private
 
     def project_params
       params.require(:project).permit(:name, :description)
     end
+
+
 end

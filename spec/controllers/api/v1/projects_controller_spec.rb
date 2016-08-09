@@ -3,7 +3,9 @@ require 'spec_helper'
 RSpec.describe Api::V1::ProjectsController, type: :controller do
   describe "GET #show" do
     before(:each) do
+      user = FactoryGirl.create :user
       @project = FactoryGirl.create :project
+      api_authorization_header user.auth_token
       get :show, id: @project.id
     end
 
@@ -17,13 +19,14 @@ RSpec.describe Api::V1::ProjectsController, type: :controller do
 
   describe "GET #index" do
     before(:each) do
+      user = FactoryGirl.create :user
       4.times { FactoryGirl.create :project }
+      api_authorization_header user.auth_token
       get :index
     end
 
     it "returns 4 records from the database" do
       projects_response = json_response
-      #print "-------------------------#{projects_response[0]}"
       expect(projects_response.size).to eql 4
     end
 
@@ -71,4 +74,46 @@ RSpec.describe Api::V1::ProjectsController, type: :controller do
       it { should respond_with 422 }
     end
   end
+
+  describe "PUT/PATCH #update" do
+    before(:each) do
+      @user = FactoryGirl.create :user
+      @project = FactoryGirl.create :project, user: @user
+      api_authorization_header @user.auth_token
+    end
+
+    context "when is successfully updated" do
+      before(:each) do
+        patch :update, { user_id: @user.id, id: @project.id,
+              project: { name: "project" } }
+      end
+
+      it "renders the json representation for the updated user" do
+        project_response = json_response
+        expect(project_response[:name]).to eql "project"
+      end
+
+      it { should respond_with 200 }
+    end
+
+    context "when is not updated" do
+      before(:each) do
+        patch :update, { user_id: @user.id, id: @project.id,
+              project: { name: "" } }
+      end
+
+      it "renders an errors json" do
+        project_response = json_response
+        expect(project_response).to have_key(:errors)
+      end
+
+      it "renders the json errors on whye the user could not be created" do
+        project_response = json_response
+        expect(project_response[:errors][:name]).to include "can't be blank"
+      end
+
+      it { should respond_with 422 }
+    end
+  end
+
 end

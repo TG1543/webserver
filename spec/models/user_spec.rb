@@ -13,6 +13,7 @@ describe User do
   it { should be_valid }
 
   it { should have_many(:projects) }
+  it { should belong_to(:rol) }
 
   describe "when email is not present" do
     before { @user.email = " " }

@@ -1,7 +1,7 @@
 require 'api_constraints'
 
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, :controllers => { registrations: 'registrations' }
   # Api definition
   namespace :api, defaults: { format: :json } do #, constraints: { subdomain: 'api' }, path: '/' do
 

@@ -28,6 +28,8 @@ describe Api::V1::UsersController do
     context "when is successfully created" do
       before(:each) do
         @user_attributes = FactoryGirl.attributes_for :user
+        rol = FactoryGirl.create :rol
+        @user_attributes[:rol_id] = rol.id
         post :create, { user: @user_attributes }, format: :json
       end
 
@@ -70,12 +72,13 @@ describe Api::V1::UsersController do
     context "when is successfully updated" do
       before(:each) do
         #@user = FactoryGirl.create :user
-        patch :update, { id: @user.id, user: { email: "newmail@example.com" } }, format: :json
+        patch :update, { id: @user.id, user: { email: "newmail@example.com",name: "Nombre1" } }, format: :json
       end
 
       it "renders the json representation for the updated user" do
         user_response = json_response
         expect(user_response[:email]).to eql "newmail@example.com"
+        expect(user_response[:name]).to eql "Nombre1"
       end
 
       it { should respond_with 200 }

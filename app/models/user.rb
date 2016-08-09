@@ -1,6 +1,8 @@
 class User < ApplicationRecord
   before_create :generate_authentication_token!
+  before_save { self.active = false }
   before_save { self.email = email.downcase }
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -16,6 +18,7 @@ class User < ApplicationRecord
   validates_confirmation_of :password
 
   has_many :projects, dependent: :destroy
+  belongs_to :rol
 
   def generate_authentication_token!
     begin

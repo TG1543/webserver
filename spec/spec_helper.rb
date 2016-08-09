@@ -17,9 +17,14 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 ActiveRecord::Migration.maintain_test_schema!
 
 RSpec.configure do |config|
-  config.include ApplicationHelper
+  #config.include ApplicationHelper
   config.include Request::JsonHelpers, :type => :controller
   config.include Devise::TestHelpers, :type => :controller
+  config.include Request::HeadersHelpers, :type => :controller
+
+  config.before(:each, type: :controller) do
+    include_default_accept_headers
+  end
   #config.include(Shoulda::Matchers::ActionController, { type: :model, file_path: /spec\/controllers/})
   # ## Mock Framework
   #

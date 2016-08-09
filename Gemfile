@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+#User model
+gem "devise"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.0.0'
@@ -46,9 +48,10 @@ group :development do
 end
 
 group :test do
-  gem "rspec-rails", "~> 2.14"
+  gem "rspec-rails"
   gem "factory_girl_rails"
   gem 'ffaker'
+  gem "shoulda-matchers"
 end
 
 group :production do

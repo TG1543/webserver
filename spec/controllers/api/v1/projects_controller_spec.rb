@@ -45,7 +45,6 @@ RSpec.describe Api::V1::ProjectsController, type: :controller do
       end
 
       it "renders the json representation for the product record just created" do
-          #print "11------------>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>#{user.email}\n"
         project_response = json_response
         expect(project_response[:name]).to eql @project_attributes[:name]
       end

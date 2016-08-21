@@ -1,13 +1,12 @@
 class Api::V1::ProjectsController < ApplicationController
-  before_action :authenticate_with_token!, only: [:create, :index, :show]
+  before_action :authenticate_with_token!, only: [:index, :show, :create, :update ]
   respond_to :json
 
- def show
-   respond_with Project.find(params[:id])
- end
+  def show
+    respond_with Project.find(params[:id])
+  end
 
- def index
-
+  def index
     respond_with Project.all
   end
 
@@ -29,14 +28,9 @@ class Api::V1::ProjectsController < ApplicationController
     end
   end
 
-
-
-
   private
-
     def project_params
       params.require(:project).permit(:name, :description)
     end
-
 
 end

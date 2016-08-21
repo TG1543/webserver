@@ -6,9 +6,29 @@ describe Api::V1::UsersController do
     request.headers['Content-Type'] = Mime::JSON.to_s
   end
 
+  describe "GET #index" do
+    before(:each) do
+      @user = FactoryGirl.create :user
+      api_authorization_header  @user.auth_token
+      4.times { FactoryGirl.create :user }
+      get :index, format: :json
+    end
+
+    it "returns the information about all users" do
+      user_response = json_response
+      expect(user_response.size).to eql 5
+    end
+
+    it "returns 200" do
+       should respond_with 200
+    end
+
+  end
+
   describe "GET #show" do
     before(:each) do
       @user = FactoryGirl.create :user
+      api_authorization_header  @user.auth_token
       get :show, id: @user.id, format: :json
     end
 

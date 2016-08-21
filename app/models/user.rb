@@ -1,6 +1,5 @@
 class User < ApplicationRecord
   before_create :generate_authentication_token!
-  before_save { self.active = false }
   before_save { self.email = email.downcase }
 
   # Include default devise modules. Others available are:

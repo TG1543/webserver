@@ -62,7 +62,7 @@ class Api::V1::UsersController < ApplicationController
 
     def get_user
       user = current_user
-      user = User.find(:id) if current_user.is_admin?
+      user = User.find(params[:id]) if current_user.is_admin?
       user
     end
 

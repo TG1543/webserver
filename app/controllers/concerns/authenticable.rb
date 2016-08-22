@@ -8,12 +8,30 @@
   end
 
   def authenticate_with_token!
-    render json: { errors: "Not authenticated" },
-                status: :unauthorized unless user_signed_in?
+    render json: { errors: "No está autenticado." },status: :unauthorized unless user_signed_in?
+    render json: { errors: "Usuario no está activo." } unless current_user.is_active?
   end
 
   def user_signed_in?
     current_user.present?
+  end
+
+
+#methods for authorization
+  def is_admin!
+    render json: { errors: "Usuario sin autorización." } if !current_user.is_admin?
+  end
+
+  def is_main_investigator!
+    render json: { errors: "Usuario sin autorización." } if !current_user.is_main_investigator?
+  end
+
+  def is_investigator!
+    render json: { errors: "Usuario sin autorización." } if !current_user.is_investigator?
+  end
+
+  def is_laboratorist!
+    render json: { errors: "Usuario sin autorización." } if !current_user.is_laboratorist?
   end
 
 end

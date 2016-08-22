@@ -3,5 +3,6 @@ FactoryGirl.define do
     name { FFaker::Product.product_name }
     description { "description #{name}" }
     user
+    state
   end
 end

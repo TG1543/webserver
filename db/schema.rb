@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160809090752) do
+ActiveRecord::Schema.define(version: 20160822062748) do
 
   create_table "projects", force: :cascade do |t|
     t.string   "name"
@@ -18,11 +18,19 @@ ActiveRecord::Schema.define(version: 20160809090752) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.integer  "user_id"
+    t.integer  "state_id"
+    t.index ["state_id"], name: "index_projects_on_state_id"
     t.index ["user_id"], name: "index_projects_on_user_id"
   end
 
-  create_table "rols", force: :cascade do |t|
-    t.string   "rol"
+  create_table "roles", force: :cascade do |t|
+    t.string   "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "states", force: :cascade do |t|
+    t.string   "value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -43,11 +51,11 @@ ActiveRecord::Schema.define(version: 20160809090752) do
     t.string   "auth_token",             default: ""
     t.string   "name"
     t.boolean  "active",                 default: false
-    t.integer  "rol_id"
+    t.integer  "role_id",                default: 5
     t.index ["auth_token"], name: "index_users_on_auth_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
-    t.index ["rol_id"], name: "index_users_on_rol_id"
+    t.index ["role_id"], name: "index_users_on_role_id"
   end
 
 end

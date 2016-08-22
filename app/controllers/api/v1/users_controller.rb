@@ -1,13 +1,14 @@
 class Api::V1::UsersController < ApplicationController
    before_action :authenticate_with_token!, only: [:index, :show, :update, :destroy]
+   before_action :is_admin!, only: [:index,:change_role,:toggle_state]
    respond_to :json
 
   def index
-      respond_with User.all
+     respond_with User.all
   end
 
   def show
-    respond_with User.find(params[:id])
+    respond_with get_user
   end
 
   def create
@@ -20,8 +21,7 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def update
-    user = current_user
-
+    user = get_user
     if user.update(user_params)
       render json: user, status: 200, location: [:api, user]
     else
@@ -30,12 +30,40 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def destroy
-    current_user.destroy
+    get_user.destroy
     head 204
   end
 
+  def change_role
+    user = get_user
+    user.role_id = params[:role_id]
+    if user.save
+      render json: user, status: 200, location: [:api, user]
+    else
+      render json: { errors: user.errors }, status: 422
+    end
+  end
+
+  def toggle_state
+    user = get_user
+    user.active = params[:active]
+    if user.save
+      render json: user, status: 200, location: [:api, user]
+    else
+      render json: { errors: user.errors }, status: 422
+    end
+  end
+
+
   private
     def user_params
-      params.require(:user).permit(:name, :active, :rol_id, :email, :password, :password_confirmation)
+      params.require(:user).permit(:name, :active, :role_id, :email, :password, :password_confirmation)
     end
+
+    def get_user
+      user = current_user
+      user = User.find(:id) if current_user.is_admin?
+      user
+    end
+
 end

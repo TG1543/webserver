@@ -48,8 +48,8 @@ describe Api::V1::UsersController do
     context "when is successfully created" do
       before(:each) do
         @user_attributes = FactoryGirl.attributes_for :user
-        rol = FactoryGirl.create :rol
-        @user_attributes[:rol_id] = rol.id
+        role = FactoryGirl.create :role
+        @user_attributes[:role_id] = role.id
         post :create, { user: @user_attributes }, format: :json
       end
 

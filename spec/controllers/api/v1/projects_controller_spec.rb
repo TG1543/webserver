@@ -6,7 +6,7 @@ RSpec.describe Api::V1::ProjectsController, type: :controller do
       user = FactoryGirl.create :user
       @project = FactoryGirl.create :project
       api_authorization_header user.auth_token
-      get :show, id: @project.id
+      get :show, {user_id: user.id,id: @project.id}
     end
 
     it "returns the information about a reporter on a hash" do
@@ -38,10 +38,11 @@ RSpec.describe Api::V1::ProjectsController, type: :controller do
     context "when is successfully created" do
       before(:each) do
         user = FactoryGirl.create :user
+        state = FactoryGirl.create :state
         @project_attributes = FactoryGirl.attributes_for :project
+        @project_attributes[:state_id] = state.id
         api_authorization_header user.auth_token
-        post :create, { user_id: user.id, project: @project_attributes }
-
+        post :create, project: @project_attributes
       end
 
       it "renders the json representation for the product record just created" do
@@ -57,7 +58,7 @@ RSpec.describe Api::V1::ProjectsController, type: :controller do
         user = FactoryGirl.create :user
         @invalid_project_attributes = { name: "", description: "description" }
         api_authorization_header user.auth_token
-        post :create, { user_id: user.id, project: @invalid_project_attributes }
+        post :create, project: @invalid_project_attributes
       end
 
       it "renders an errors json" do
@@ -77,7 +78,8 @@ RSpec.describe Api::V1::ProjectsController, type: :controller do
   describe "PUT/PATCH #update" do
     before(:each) do
       @user = FactoryGirl.create :user
-      @project = FactoryGirl.create :project, user: @user
+      @state = FactoryGirl.create :state
+      @project = FactoryGirl.create :project, user: @user, state: @state
       api_authorization_header @user.auth_token
     end
 

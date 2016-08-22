@@ -8,8 +8,11 @@
   end
 
   def authenticate_with_token!
-    render json: { errors: "No está autenticado." },status: :unauthorized unless user_signed_in?
-    render json: { errors: "Usuario no está activo." } unless current_user.is_active?
+    if !user_signed_in?
+      render json: { errors: "No está autenticado." },status: :unauthorized
+    else
+      render json: { errors: "Usuario no está activo." } unless current_user && current_user.is_active?
+    end
   end
 
   def user_signed_in?

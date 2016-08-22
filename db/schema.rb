@@ -10,7 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160822062748) do
+ActiveRecord::Schema.define(version: 20160822072841) do
+
+  create_table "experiments", force: :cascade do |t|
+    t.string   "description"
+    t.integer  "project_id"
+    t.integer  "state_id"
+    t.integer  "result_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["project_id"], name: "index_experiments_on_project_id"
+    t.index ["result_id"], name: "index_experiments_on_result_id"
+    t.index ["state_id"], name: "index_experiments_on_state_id"
+  end
 
   create_table "projects", force: :cascade do |t|
     t.string   "name"
@@ -23,6 +35,12 @@ ActiveRecord::Schema.define(version: 20160822062748) do
     t.index ["user_id"], name: "index_projects_on_user_id"
   end
 
+  create_table "results", force: :cascade do |t|
+    t.string   "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "roles", force: :cascade do |t|
     t.string   "value"
     t.datetime "created_at", null: false
@@ -33,6 +51,15 @@ ActiveRecord::Schema.define(version: 20160822062748) do
     t.string   "value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "user_experiments", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "experiment_id"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.index ["experiment_id"], name: "index_user_experiments_on_experiment_id"
+    t.index ["user_id"], name: "index_user_experiments_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|

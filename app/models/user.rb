@@ -13,15 +13,17 @@ class User < ApplicationRecord
 
   validates_confirmation_of :password
 
-  has_many :projects, dependent: :destroy
   belongs_to :role
+  has_many :projects, dependent: :destroy
+  has_many :user_experiments
+  has_many :experiments, through: :user_experiments
 
 
 #methods for authorization
   def is_active?
     self.active
   end
-  
+
   def is_admin?
     self.role_id == 1
   end

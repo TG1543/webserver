@@ -10,6 +10,10 @@ Role.create( value: "Usuario")
 State.create(value: "Activo")
 State.create(value: "Inactivo")
 
+#Create state
+Result.create(value: "Exitoso")
+Result.create(value: "Fracaso")
+
 # Create administrador
 user = User.create( email: 'administrador@tg.com',
                     password: '1234567',

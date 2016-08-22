@@ -1,5 +1,5 @@
 class Api::V1::UsersController < ApplicationController
-   before_action :authenticate_with_token!, only: [:index, :show, :update, :destroy]
+   before_action :authenticate_with_token!, only: [:index, :show, :update, :destroy,:change_role,:toggle_state]
    before_action :is_admin!, only: [:index,:change_role,:toggle_state]
    respond_to :json
 

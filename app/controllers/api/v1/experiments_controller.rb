@@ -31,7 +31,13 @@ class Api::V1::ExperimentsController < ApplicationController
 
   def add_users_to_experiment
       experiment = get_project.experiments.find(params[:id])
-      
+      #TODO: Obtener usuarios
+      if experiment.add_users(users)
+        render json: experiment.users, status: 201, location: [:api, experiment]
+      else
+        render json: { errors: experiment.errors }, status: 422
+  end
+
   end
 
   private

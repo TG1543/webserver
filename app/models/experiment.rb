@@ -4,5 +4,14 @@ class Experiment < ApplicationRecord
   belongs_to :result
 
   has_many :user_experiments
-  has_many :user, through: :user_experiments
+  has_many :users, through: :user_experiments
+
+  def add_users(users)
+    experiment = self
+    users.each do |user|
+      experiment.user_experiments.build(user.id)
+    end
+    self.save
+  end
+
 end

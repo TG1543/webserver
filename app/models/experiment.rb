@@ -5,11 +5,12 @@ class Experiment < ApplicationRecord
 
   has_many :user_experiments
   has_many :users, through: :user_experiments
+  has_many :iterations
 
   def add_users(users)
     experiment = self
     users.each do |user|
-      experiment.user_experiments.build(user.id)
+      experiment.user_experiments.build(user)
     end
     self.save
   end

@@ -36,8 +36,7 @@ class Api::V1::ExperimentsController < ApplicationController
         render json: experiment.users, status: 201, location: [:api, experiment]
       else
         render json: { errors: experiment.errors }, status: 422
-  end
-
+      end
   end
 
   private

@@ -10,7 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160822072841) do
+ActiveRecord::Schema.define(version: 20160830001040) do
+
+  create_table "binnacles", force: :cascade do |t|
+    t.integer  "iteration_id"
+    t.text     "comment"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.date     "date"
+    t.index ["iteration_id"], name: "index_binnacles_on_iteration_id"
+  end
 
   create_table "experiments", force: :cascade do |t|
     t.string   "description"
@@ -22,6 +31,16 @@ ActiveRecord::Schema.define(version: 20160822072841) do
     t.index ["project_id"], name: "index_experiments_on_project_id"
     t.index ["result_id"], name: "index_experiments_on_result_id"
     t.index ["state_id"], name: "index_experiments_on_state_id"
+  end
+
+  create_table "iterations", force: :cascade do |t|
+    t.integer  "experiment_id"
+    t.date     "started_at"
+    t.date     "ended_at"
+    t.integer  "binnacle_id"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.index ["experiment_id"], name: "index_iterations_on_experiment_id"
   end
 
   create_table "projects", force: :cascade do |t|

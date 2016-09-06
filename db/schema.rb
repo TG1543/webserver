@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(version: 20160830001040) do
     t.integer  "experiment_id"
     t.date     "started_at"
     t.date     "ended_at"
-    t.integer  "binnacle_id"
+    t.text     "binnacle_id"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
     t.index ["experiment_id"], name: "index_iterations_on_experiment_id"

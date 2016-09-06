@@ -33,7 +33,7 @@ Rails.application.routes.draw do
           end
         end
 
-        resources :equipments, :only [:index, :show,:update,:create] do
+        resources :equipments, :only => [:index, :show,:update,:create] do
           member do
             patch 'toggle_state' => 'equipments#toggle_state', as: :toggle_state
           end

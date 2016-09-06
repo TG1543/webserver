@@ -97,7 +97,7 @@ class Api::V1::IterationsController < ApplicationController
     end
 
     def get_experiment
-      get_user.experiment.find(params[:experiment_id])
+      get_user.experiments.find(params[:experiment_id])
     end
 
     def get_user

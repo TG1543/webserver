@@ -16,7 +16,8 @@ class User < ApplicationRecord
   belongs_to :role
   has_many :projects, dependent: :destroy
   has_many :user_experiments
-  has_many :experiments, through: :user_experiments
+  has_many :experiments, through: :projects
+  has_many :assign_experiments, through: :user_experiments,  source: :experiment
 
 
 #methods for authorization

@@ -33,8 +33,6 @@ Rails.application.routes.draw do
           end
         end
       end
-
-      resources :projects, :only => [:index, :create]
       resources :sessions, :only => [:create, :destroy]
     end
   end

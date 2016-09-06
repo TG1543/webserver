@@ -17,7 +17,7 @@ class Api::V1::IterationsController < ApplicationController
   def update
     iteration = get_iteration
     if iteration.update(iteration_params)
-      render json: experiment, status: 200, location: [:api, current_user,get_experiment,iteration]
+      render json: experiment, status: 200, location: [:api, get_user,get_experiment,iteration]
     else
       render json: { errors: experiment.errors || "El experimento está cancelado" }, status: 422
     end
@@ -26,7 +26,7 @@ class Api::V1::IterationsController < ApplicationController
   def create
     iteration = get_experiment.iterations.build(iteration_params)
     if iteration.save
-      render json: experiment, status: 201, location: [:api, current_user,get_experiment,iteration]
+      render json: experiment, status: 201, location: [:api, get_user,get_experiment,iteration]
     else
       render json: { errors: experiment.errors }, status: 422
     end
@@ -35,7 +35,7 @@ class Api::V1::IterationsController < ApplicationController
   def add_comment
       iteration = get_iteration
       if iteration.add_comment(comment_params)
-        render json: iteration, status: 201, location: [:api, current_user,get_experiment,iteration]
+        render json: iteration, status: 201, location: [:api, get_user,get_experiment,iteration]
       else
         render json: { errors: iteration.errors }, status: 422
       end
@@ -44,7 +44,7 @@ class Api::V1::IterationsController < ApplicationController
   def add_plot
       iteration = get_iteration
       if iteration.add_plot(plot_params)
-        render json: iteration, status: 201, location: [:api, current_user,get_experiment,iteration]
+        render json: iteration, status: 201, location: [:api, get_user,get_experiment,iteration]
       else
         render json: { errors: iteration.errors }, status: 422
       end
@@ -54,7 +54,7 @@ class Api::V1::IterationsController < ApplicationController
     equipment_id = params[:equipment][:equipment_id]
     iteration = get_iteration
     if iteration.assign_equipment(equipment_id)
-        render json: iteration, status: 201, location: [:api, current_user,get_experiment,iteration]
+        render json: iteration, status: 201, location: [:api, get_user,get_experiment,iteration]
     else
         render json: { errors: "No se asignó el equipo." }, status: 422
     end
@@ -63,7 +63,7 @@ class Api::V1::IterationsController < ApplicationController
   def unassign_equipment
     iteration = get_iteration
     if iteration.unassign_equipment
-        render json: iteration, status: 201, location: [:api, current_user,get_experiment,iteration]
+        render json: iteration, status: 201, location: [:api, get_user,get_experiment,iteration]
     else
         render json: {  errors: "No se desasignó el equipo."}, status: 422
     end
@@ -73,7 +73,7 @@ class Api::V1::IterationsController < ApplicationController
     iteration = get_iteration
     values = params[:values]
     if iteration.add_values_to_parameter(values)
-        render json: iteration, status: 201, location: [:api, current_user,get_experiment,iteration]
+        render json: iteration, status: 201, location: [:api, get_user,get_experiment,iteration]
     else
         render json: {  errors: "No se asignaron los valores de los parámetros al equipo."}, status: 422
     end

@@ -18,7 +18,7 @@ class Api::V1::ProjectsController < ApplicationController
   def create
     project = get_user.projects.build(project_params)
     if project.save
-      render json: project, status: 201, location: [:api, current_user, project]
+      render json: project, status: 201, location: [:api, get_user, project]
     else
       render json: { errors: project.errors }, status: 422
     end
@@ -27,7 +27,7 @@ class Api::V1::ProjectsController < ApplicationController
   def update
     project = get_user.projects.find(params[:id])
     if project.update(project_params)
-      render json: project, status: 200, location: [:api, current_user, project]
+      render json: project, status: 200, location: [:api, get_user, project]
     else
       render json: { errors: project.errors }, status: 422
     end

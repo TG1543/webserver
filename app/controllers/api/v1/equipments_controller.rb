@@ -15,7 +15,7 @@ class Api::V1::EquipmentsController < ApplicationController
   def create
     equipment = Equipment.new(equipment_params)
     if equipment.save
-      render json: equipment, status: 201, location: [:api, current_user, equipment]
+      render json: equipment, status: 201, location: [:api, get_user, equipment]
     else
       render json: { errors: equipment.errors }, status: 422
     end
@@ -24,13 +24,19 @@ class Api::V1::EquipmentsController < ApplicationController
   def update
     equipment = Equipment.find(params[:id])
     if equipment.update(project_params)
-      render json: equipment, status: 200, location: [:api, current_user, equipment]
+      render json: equipment, status: 200, location: [:api, get_user, equipment]
     else
       render json: { errors: equipment.errors }, status: 422
     end
   end
 
   def toggle_state
+    equipment = Equipment.find(params[:id])
+    equipment.active = params[:equipment][:active]
+    if user.save
+      render json: user, status: 200, location: [:api, get_user, equipment]
+    else
+      render json: { errors: user.errors }, status: 422
   end
 
   private

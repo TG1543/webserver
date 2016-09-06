@@ -1,5 +1,5 @@
 class Api::V1::IterationsController < ApplicationController
-  before_action :authenticate_with_token!, only: [:index, :show, :create, :update,:add_comment]
+  before_action :authenticate_with_token!, only: [:index, :show, :create, :update,:add_comment, :add_plot]
   before_action :is_investigator!
 
   def index

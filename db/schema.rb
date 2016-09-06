@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160906022423) do
+ActiveRecord::Schema.define(version: 20160906030922) do
 
   create_table "binnacles", force: :cascade do |t|
     t.integer  "iteration_id"
@@ -37,7 +37,6 @@ ActiveRecord::Schema.define(version: 20160906022423) do
     t.integer  "experiment_id"
     t.date     "started_at"
     t.date     "ended_at"
-    t.integer  "binnacle_id"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
     t.index ["experiment_id"], name: "index_iterations_on_experiment_id"

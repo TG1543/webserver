@@ -7,6 +7,6 @@ class Project < ApplicationRecord
    has_many :experiments
 
    def is_canceled?
-     self.state == State.canceled
+       self.state_id.to_s == State.canceled.to_s
    end
 end

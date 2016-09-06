@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160830001040) do
+ActiveRecord::Schema.define(version: 20160906022423) do
 
   create_table "binnacles", force: :cascade do |t|
     t.integer  "iteration_id"
@@ -41,6 +41,16 @@ ActiveRecord::Schema.define(version: 20160830001040) do
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
     t.index ["experiment_id"], name: "index_iterations_on_experiment_id"
+  end
+
+  create_table "plots", force: :cascade do |t|
+    t.string   "name"
+    t.string   "x_axis"
+    t.string   "y_axis"
+    t.integer  "iteration_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.index ["iteration_id"], name: "index_plots_on_iteration_id"
   end
 
   create_table "projects", force: :cascade do |t|

@@ -37,10 +37,25 @@ class Api::V1::IterationsController < ApplicationController
       end
   end
 
+  def add_plot
+      iteration = get_experiment.iterations.find(params[:id])
+      if iteration.add_plot(plot_params)
+        render json: iteration, status: 201, location: [:api, iteration]
+      else
+        render json: { errors: iteration.errors }, status: 422
+      end
+  end
+
+
   private
+    def plot_params
+      params.require(:binnacle).permit(:iterations_id,:name,:x_axis,:y_axis)
+    end
+
     def comment_params
         params.require(:binnacle).permit(:comment,:date)
     end
+
     def iteration_params
       params.require(:iteration).permit(:experiment_id, :started_at, :ended_at)
     end

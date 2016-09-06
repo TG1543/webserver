@@ -6,5 +6,7 @@ class Iteration < ApplicationRecord
   def add_comment(comment_params)
     comment = self.binnacles.build(comment_params)
     self.save
+    self.binnacle_id = comment.id
+    self.save
   end
 end

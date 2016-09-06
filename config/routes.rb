@@ -12,6 +12,7 @@ Rails.application.routes.draw do
           patch 'change_role' => 'users#change_role', as: :change_role
           patch 'toggle_state' => 'users#toggle_state', as: :toggle_state
         end
+        
         resources :projects, :only => [:index, :show, :create, :update] do
           resources :experiments, :only => [:index,:show,:update,:create] do
             member do
@@ -19,6 +20,7 @@ Rails.application.routes.draw do
             end
           end
         end
+
         resources :experiments, :only => [] do
           resources :iterations, :only =>[:index,:show,:update,:create] do
             member do
@@ -27,8 +29,6 @@ Rails.application.routes.draw do
           end
         end
       end
-
-
 
       resources :projects, :only => [:index, :create]
       resources :sessions, :only => [:create, :destroy]

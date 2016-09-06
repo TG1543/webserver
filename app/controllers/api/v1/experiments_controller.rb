@@ -17,7 +17,7 @@ class Api::V1::ExperimentsController < ApplicationController
   def update
     experiment = get_project.experiments.find(params[:id])
     if experiment.update(experiment_params)
-      render json: experiment, status: 200, location: [:api, experiment]
+      render json: experiment, status: 200, location: [:api, current_user,get_project, experiment]
     else
       render json: { errors: experiment.errors }, status: 422
     end
@@ -26,7 +26,7 @@ class Api::V1::ExperimentsController < ApplicationController
   def create
     experiment = get_project.experiments.build(experiment_params)
     if experiment.save
-      render json: experiment, status: 201, location: [:api, experiment]
+      render json: experiment, status: 201, location: [:api, current_user,get_project, experiment]
     else
       render json: { errors: experiment.errors }, status: 422
     end
@@ -36,7 +36,7 @@ class Api::V1::ExperimentsController < ApplicationController
       experiment = get_experiment
       #TODO: Obtener usuarios
       if experiment.add_users(users)
-        render json: experiment.users, status: 201, location: [:api, experiment]
+        render json: experiment.users, status: 201, location: [:api, current_user,get_project, experiment]
       else
         render json: { errors: experiment.errors }, status: 422
       end

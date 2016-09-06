@@ -8,7 +8,7 @@ class Api::V1::ProjectsController < ApplicationController
   respond_to :json
 
   def show
-    respond_with get_user.projects.find(params[:id])
+    respond_with get_user.projects.where(id: params[:id]).first
   end
 
   def index

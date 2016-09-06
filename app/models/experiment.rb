@@ -2,6 +2,7 @@ class Experiment < ApplicationRecord
   belongs_to :project
   belongs_to :state
   belongs_to :result, optional: true
+  has_one :user, through: :project
 
   has_many :user_experiments
   has_many :users, through: :user_experiments
@@ -18,5 +19,5 @@ class Experiment < ApplicationRecord
   def is_canceled?
     self.state == State.canceled
   end
-  
+
 end

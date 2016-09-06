@@ -1,11 +1,7 @@
 class Api::V1::IterationsController < ApplicationController
-  before_action :authenticate_with_token!, only:
-                                          [ :index, :show, :create,
-                                            :update,:add_comment, :add_plot,
-                                            :add_values_to_equipment,
-                                            :assign_equipment,
-                                            :unassign_equipment]
+  before_action :authenticate_with_token!
   before_action :is_investigator!
+  before_action :is_authorized!
   before_action :is_canceled!, except: [:index,:show,:create]
   respond_to :json
 
@@ -15,12 +11,12 @@ class Api::V1::IterationsController < ApplicationController
   end
 
   def show
-    respond_with get_experiment.iterations.find(params[:id])
+    respond_with get_iteration
   end
 
   def update
-    experiment = get_experiment.iterations.find(params[:id])
-    if experiment.update(experiment_params)
+    iteration = get_iteration
+    if iteration.update(iteration_params)
       render json: experiment, status: 200, location: [:api, experiment]
     else
       render json: { errors: experiment.errors || "El experimento está cancelado" }, status: 422
@@ -28,8 +24,8 @@ class Api::V1::IterationsController < ApplicationController
   end
 
   def create
-    experiment = get_project.experiments.build(experiment_params)
-    if experiment.save
+    iteration = get_experiment.iterations.build(iteration_params)
+    if iteration.save
       render json: experiment, status: 201, location: [:api, experiment]
     else
       render json: { errors: experiment.errors }, status: 422
@@ -37,7 +33,7 @@ class Api::V1::IterationsController < ApplicationController
   end
 
   def add_comment
-      iteration = get_experiment.iterations.find(params[:id])
+      iteration = get_iteration
       if iteration.add_comment(comment_params)
         render json: iteration, status: 201, location: [:api, iteration]
       else
@@ -46,7 +42,7 @@ class Api::V1::IterationsController < ApplicationController
   end
 
   def add_plot
-      iteration = get_experiment.iterations.find(params[:id])
+      iteration = get_iteration
       if iteration.add_plot(plot_params)
         render json: iteration, status: 201, location: [:api, iteration]
       else
@@ -56,7 +52,7 @@ class Api::V1::IterationsController < ApplicationController
 
   def assign_equipment
     equipment_id = params[:equipment_id]
-    iteration = get_experiment.iterations.find(params[:id])
+    iteration = get_iteration
     if iteration.assign_equipment(equipment_id)
         render json: iteration, status: 201, location: [:api, iteration]
     else
@@ -65,7 +61,7 @@ class Api::V1::IterationsController < ApplicationController
   end
 
   def unassign_equipment
-    iteration = get_experiment.iterations.find(params[:id])
+    iteration = get_iteration
     if iteration.unassign_equipment
         render json: iteration, status: 201, location: [:api, iteration]
     else
@@ -74,7 +70,7 @@ class Api::V1::IterationsController < ApplicationController
   end
 
   def add_values_to_equipment
-    iteration = get_experiment.iterations.find(params[:id])
+    iteration = get_iteration
     values = params[:values]
     if iteration.add_values_to_parameter(values)
         render json: iteration, status: 201, location: [:api, iteration]
@@ -96,8 +92,14 @@ class Api::V1::IterationsController < ApplicationController
       params.require(:iteration).permit(:experiment_id, :started_at, :ended_at, :state_id)
     end
 
+    def get_iteration
+      get_experiment.iterations.find(params[:id])
+    end
+
     def get_experiment
-      get_user.experiments.find(params[:experiment_id])
+      experiment = get_user.experiments.where(id: params[:experiment_id]).first
+      experiment = get_user.assign_experiments.where(id: params[:experiment_id]).first unless experiment
+      experiment
     end
 
     def get_user
@@ -108,5 +110,12 @@ class Api::V1::IterationsController < ApplicationController
 
     def is_canceled!
       render json: { errors: "La iteracion está cancelada" } if get_experiment.iterations.find(params[:id]).is_canceled?
+    end
+
+    def is_authorized!
+      if !current_user.is_admin?
+        render json: { errors: "Usuario sin autorización." } if (!current_user.experiments.where(id: params[:experiment_id]).first &&
+                                                  !current_user.assign_experiments.where(id: params[:experiment_id]).first)
+      end
     end
 end

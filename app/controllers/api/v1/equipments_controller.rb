@@ -32,7 +32,7 @@ class Api::V1::EquipmentsController < ApplicationController
 
   def toggle_state
     equipment = Equipment.find(params[:id])
-    equipment.active = params[:equipment][:active]
+    equipment.active = !equipment.active
     if user.save
       render json: user, status: 200, location: [:api, get_user, equipment]
     else

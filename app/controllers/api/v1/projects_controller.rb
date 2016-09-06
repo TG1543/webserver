@@ -3,6 +3,8 @@ class Api::V1::ProjectsController < ApplicationController
   before_action :is_admin!, only: [:index, :create]
   before_action :is_main_investigator!, only: [:show, :update]
 
+
+  before_action :is_canceled!, except: [:index,:show,:create]
   respond_to :json
 
   def show
@@ -40,6 +42,10 @@ class Api::V1::ProjectsController < ApplicationController
       user = current_user
       user = User.find(params[:user_id]) if current_user.is_admin?
       user
+    end
+
+    def is_canceled!
+      render json: { errors: "La iteracion está cancelada" } if get_user.projects.find(params[:id]).is_canceled?
     end
 
 end

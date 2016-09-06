@@ -3,6 +3,9 @@ class Api::V1::ExperimentsController < ApplicationController
   before_action :is_main_investigator!, only: [:index, :create, :add_user_to_experiment]
   before_action :is_investigator!, only: [:show, :update]
 
+  before_action :is_canceled!, except: [:index,:show,:create]
+  respond_to :json
+
   def index
     respond_with get_project.experiments.all
   end
@@ -52,6 +55,10 @@ class Api::V1::ExperimentsController < ApplicationController
       user = current_user
       user = User.find(params[:user_id]) if current_user.is_main_investigator?
       user
+    end
+
+    def is_canceled!
+      render json: { errors: "El experimento está cancelada" } if get_experiment.is_canceled?
     end
 
 end

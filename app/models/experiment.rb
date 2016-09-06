@@ -15,4 +15,8 @@ class Experiment < ApplicationRecord
     self.save
   end
 
+  def is_canceled?
+    self.state == State.canceled
+  end
+  
 end

@@ -1,6 +1,14 @@
 class Api::V1::IterationsController < ApplicationController
-  before_action :authenticate_with_token!, only: [:index, :show, :create, :update,:add_comment, :add_plot]
+  before_action :authenticate_with_token!, only:
+                                          [ :index, :show, :create,
+                                            :update,:add_comment, :add_plot,
+                                            :add_values_to_equipment,
+                                            :assign_equipment,
+                                            :unassign_equipment]
   before_action :is_investigator!
+  before_action :is_canceled!, except: [:index,:show,:create]
+  respond_to :json
+
 
   def index
     respond_with get_experiment.iterations.all
@@ -15,7 +23,7 @@ class Api::V1::IterationsController < ApplicationController
     if experiment.update(experiment_params)
       render json: experiment, status: 200, location: [:api, experiment]
     else
-      render json: { errors: experiment.errors }, status: 422
+      render json: { errors: experiment.errors || "El experimento está cancelado" }, status: 422
     end
   end
 
@@ -46,6 +54,34 @@ class Api::V1::IterationsController < ApplicationController
       end
   end
 
+  def assign_equipment
+    equipment_id = params[:equipment_id]
+    iteration = get_experiment.iterations.find(params[:id])
+    if iteration.assign_equipment(equipment_id)
+        render json: iteration, status: 201, location: [:api, iteration]
+    else
+        render json: { errors: "No se asignó el equipo." }, status: 422
+    end
+  end
+
+  def unassign_equipment
+    iteration = get_experiment.iterations.find(params[:id])
+    if iteration.unassign_equipment
+        render json: iteration, status: 201, location: [:api, iteration]
+    else
+        render json: {  errors: "No se desasignó el equipo."}, status: 422
+    end
+  end
+
+  def add_values_to_equipment
+    iteration = get_experiment.iterations.find(params[:id])
+    values = params[:values]
+    if iteration.add_values_to_parameter(values)
+        render json: iteration, status: 201, location: [:api, iteration]
+    else
+        render json: {  errors: "No se asignaron los valores de los parámetros al equipo."}, status: 422
+    end
+  end
 
   private
     def plot_params
@@ -57,7 +93,7 @@ class Api::V1::IterationsController < ApplicationController
     end
 
     def iteration_params
-      params.require(:iteration).permit(:experiment_id, :started_at, :ended_at)
+      params.require(:iteration).permit(:experiment_id, :started_at, :ended_at, :state_id)
     end
 
     def get_experiment
@@ -68,5 +104,9 @@ class Api::V1::IterationsController < ApplicationController
       user = current_user
       user = User.find(params[:user_id]) if current_user.is_main_investigator?
       user
+    end
+
+    def is_canceled!
+      render json: { errors: "La iteracion está cancelada" } if get_experiment.iterations.find(params[:id]).is_canceled?
     end
 end

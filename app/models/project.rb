@@ -5,4 +5,8 @@ class Project < ApplicationRecord
    belongs_to :user
    belongs_to :state
    has_many :experiments
+
+   def is_canceled?
+     self.state == State.canceled
+   end
 end

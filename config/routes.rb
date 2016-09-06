@@ -26,6 +26,9 @@ Rails.application.routes.draw do
             member do
               post 'add_comment' => 'iterations#add_comment', as: :add_comment
               post 'add_plot' => 'iterations#add_plot', as: :add_plot
+              post 'add_values_to_equipment' => 'iterations#add_values_to_equipment', as: :add_values_to_equipment
+              post 'assign_equipment' => 'iterations#assign_equipment', as: :assign_equipment
+              post 'unassign_equipment' => 'iterations#unassign_equipment', as: :unassign_equipment
             end
           end
         end

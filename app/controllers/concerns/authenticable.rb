@@ -8,7 +8,7 @@
   end
 
   def authenticate_with_token!
-    if !user_signed_in? && current_user.is_active?
+    if !user_signed_in? && current_user && current_user.is_active?
       render json: { errors: "No está autenticado o el usuario está Inactivo" },status: :unauthorized
     else
       render json: { errors: "Usuario no está activo." } unless current_user && current_user.is_active?

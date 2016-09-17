@@ -37,6 +37,7 @@ class Api::V1::EquipmentsController < ApplicationController
       render json: user, status: 200, location: [:api, get_user, equipment]
     else
       render json: { errors: user.errors }, status: 422
+    end
   end
 
   private

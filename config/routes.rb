@@ -1,6 +1,8 @@
 require 'api_constraints'
 
 Rails.application.routes.draw do
+  get '/' => 'static_pages#index'
+
   devise_for :users, :controllers => { registrations: 'registrations' }
 
   # Api definition

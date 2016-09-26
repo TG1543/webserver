@@ -45,7 +45,7 @@ class Api::V1::ProjectsController < ApplicationController
     end
 
     def is_canceled!
-      render json: { errors: "La iteracion está cancelada" } if get_user.projects.find(params[:id]).is_canceled?
+      render json: { errors: "La iteración está cancelada" } if get_user.projects.find(params[:id]).is_canceled?
     end
 
 end

@@ -12,35 +12,35 @@ Rails.application.routes.draw do
           patch 'change_role' => 'users#change_role', as: :change_role
           patch 'toggle_state' => 'users#toggle_state', as: :toggle_state
         end
-
-        resources :projects, :only => [:index, :show, :create, :update] do
-          resources :experiments, :only => [:index,:show,:update,:create] do
-            member do
-              patch 'add_users_to_experiment' => 'experiments#add_users_to_experiment', as: :add_users_to_experiment
-            end
-          end
-        end
-
-        resources :experiments, :only => [] do
-          resources :iterations, :only =>[:index,:show,:update,:create] do
-            member do
-              post 'add_comment' => 'iterations#add_comment', as: :add_comment
-              post 'add_plot' => 'iterations#add_plot', as: :add_plot
-              post 'add_values_to_equipment' => 'iterations#add_values_to_equipment', as: :add_values_to_equipment
-              post 'assign_equipment' => 'iterations#assign_equipment', as: :assign_equipment
-              post 'unassign_equipment' => 'iterations#unassign_equipment', as: :unassign_equipment
-            end
-          end
-        end
-
-        resources :equipments, :only => [:index, :show,:update,:create] do
-          member do
-            patch 'toggle_state' => 'equipments#toggle_state', as: :toggle_state
-          end
-        end
-
       end
+
+      resources :projects, :only => [:index, :show, :create, :update] do
+      end
+
+      resources :experiments, :only => [:index,:show,:update,:create] do
+        member do
+          patch 'add_users_to_experiment' => 'experiments#add_users_to_experiment', as: :add_users_to_experiment
+        end
+      end
+
+      resources :iterations, :only =>[:index,:show,:update,:create] do
+        member do
+          post 'add_comment' => 'iterations#add_comment', as: :add_comment
+          post 'add_plot' => 'iterations#add_plot', as: :add_plot
+          post 'add_values_to_equipment' => 'iterations#add_values_to_equipment', as: :add_values_to_equipment
+          post 'assign_equipment' => 'iterations#assign_equipment', as: :assign_equipment
+          post 'unassign_equipment' => 'iterations#unassign_equipment', as: :unassign_equipment
+        end
+      end
+
+      resources :equipments, :only => [:index, :show,:update,:create] do
+        member do
+          patch 'toggle_state' => 'equipments#toggle_state', as: :toggle_state
+        end
+      end
+
       resources :sessions, :only => [:create, :destroy]
+
     end
   end
 end

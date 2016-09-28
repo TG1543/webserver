@@ -7,7 +7,7 @@ class Api::V1::IterationsController < ApplicationController
 
 
   def index
-    respond_with get_experiment.iterations.all
+    respond_with Experiment.find(id: params[:experiment_id]).iterations.all
   end
 
   def show

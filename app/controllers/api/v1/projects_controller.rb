@@ -8,7 +8,7 @@ class Api::V1::ProjectsController < ApplicationController
   respond_to :json
 
   def show
-    respond_with Projects.where(id: params[:id]).first#, include: {experiments: { include: :iterations}}
+    respond_with Project.where(id: params[:id]).first#, include: {experiments: { include: :iterations}}
   end
 
   def index

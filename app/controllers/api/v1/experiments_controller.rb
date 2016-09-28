@@ -8,7 +8,7 @@ class Api::V1::ExperimentsController < ApplicationController
   respond_to :json
 
   def index
-    respond_with Project.find(id: params[:project_id]).experiments.all
+    respond_with Project.find(params[:project_id]).experiments.all
   end
 
   def show

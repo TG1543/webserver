@@ -26,7 +26,7 @@ Rails.application.routes.draw do
       end
       get 'experiments/index/:project_id' => 'experiments#index', as: :index
 
-      resources :iterations, :only =>[:index,:show,:update,:create] do
+      resources :iterations, :only =>[:show,:update,:create] do
         member do
           post 'add_comment' => 'iterations#add_comment', as: :add_comment
           post 'add_plot' => 'iterations#add_plot', as: :add_plot

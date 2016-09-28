@@ -24,7 +24,7 @@ Rails.application.routes.draw do
           patch 'add_users_to_experiment' => 'experiments#add_users_to_experiment', as: :add_users_to_experiment
         end
       end
-      get 'experiments/index/:project_id' => 'experiments#index', as: :index
+      get 'experiments/index/:project_id' => 'experiments#index', as: :experiments_index
 
       resources :iterations, :only =>[:show,:update,:create] do
         member do
@@ -35,7 +35,7 @@ Rails.application.routes.draw do
           post 'unassign_equipment' => 'iterations#unassign_equipment', as: :unassign_equipment
         end
       end
-      get 'iterations/index/:experiment_id' => 'iterations#index', as: :index
+      get 'iterations/index/:experiment_id' => 'iterations#index', as: :iterations_index
 
       resources :equipments, :only => [:index, :show,:update,:create] do
         member do

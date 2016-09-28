@@ -69,7 +69,8 @@ class Api::V1::ExperimentsController < ApplicationController
     def is_authorized!
       if !current_user.is_main_investigator?
         experiment = get_experiment
-        render json: { errors: "Usuario sin autorización." } if !(current_user.experiments.where(id: params[:id]).first || current_user.assign_experiments.where(id: params[:id]).first)
+        render json: { errors: "Usuario sin autorización." } if !(current_user.experiments.where(id: params[:id]).first ||
+                                                current_user.assign_experiments.where(id: params[:id]).first)
       end
     end
 

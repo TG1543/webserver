@@ -93,7 +93,7 @@ class Api::V1::IterationsController < ApplicationController
     end
 
     def get_iteration
-      get_experiment.iterations.find(params[:id])
+      Iterations.find(params[:id])
     end
 
     def get_experiment

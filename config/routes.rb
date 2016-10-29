@@ -16,7 +16,13 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :projects, :only => [:index, :show, :create, :update] do
+      
+
+      resources :projects, :only => [:create, :update] do
+      end
+      controller :projects, path: '/projects' do
+        match '/', to: 'projects#index', via: [:get, :options], as: :projects_index
+        match '/:id',to: 'projects#show', via: [:get, :options], as: :project_show
       end
 
       resources :experiments, :only => [:show,:update,:create] do
@@ -43,7 +49,10 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :sessions, :only => [:create, :destroy]
+      controller :sessions, path: '/sessions' do
+        match '/', to: 'sessions#create', via: [:post, :options], as: :sessions_create
+        match '/:id',to: 'sessions#destroy', via: [:delete, :options], as: :session_destroy
+      end
 
     end
   end

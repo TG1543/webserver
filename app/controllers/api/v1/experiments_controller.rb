@@ -12,7 +12,7 @@ class Api::V1::ExperimentsController < ApplicationController
   end
 
   def show
-    respond_with get_experiment
+    respond_with get_experiment, include: :iterations
   end
 
   def update
@@ -63,11 +63,13 @@ class Api::V1::ExperimentsController < ApplicationController
     end
 
     def is_canceled!
+      cors_control_headers
       render json: { errors: "El experimento está cancelada" } if get_experiment.is_canceled?
     end
 
     def is_authorized!
       if !current_user.is_main_investigator?
+        cors_control_headers
         experiment = get_experiment
         render json: { errors: "Usuario sin autorización." } if !(current_user.experiments.where(id: params[:id]).first ||
                                                 current_user.assign_experiments.where(id: params[:id]).first)

@@ -9,9 +9,11 @@
 
   def authenticate_with_token!
     if !user_signed_in? && current_user && current_user.is_active?
-      render json: { errors: "No está autenticado o el usuario está Inactivo" },status: :unauthorized
+      cors_control_headers
+      render json: { errors: "No está autenticado o el usuario está Inactivo" }, status: :unauthorized
     else
-      render json: { errors: "Usuario no está activo." } unless current_user && current_user.is_active?
+      cors_control_headers
+      render json: { errors: "Usuario no está activo." }, status: 422 unless current_user && current_user.is_active?
     end
   end
 
@@ -22,19 +24,23 @@
 
 #methods for authorization
   def is_admin!
-    render json: { errors: "Usuario sin autorización." } if !current_user.is_admin?
+    cors_control_headers
+    render json: { errors: "Usuario sin autorización." }, status: 422 if !current_user.is_admin?
   end
 
   def is_main_investigator!
-    render json: { errors: "Usuario sin autorización." } if !current_user.is_main_investigator?
+    cors_control_headers
+    render json: { errors: "Usuario sin autorización." }, status: 422 if !current_user.is_main_investigator?
   end
 
   def is_investigator!
-    render json: { errors: "Usuario sin autorización." } if !current_user.is_investigator?
+    cors_control_headers
+    render json: { errors: "Usuario sin autorización." }, status: 422 if !current_user.is_investigator?
   end
 
   def is_laboratorist!
-    render json: { errors: "Usuario sin autorización." } if !current_user.is_laboratorist?
+    cors_control_headers
+    render json: { errors: "Usuario sin autorización." }, status: 422 if !current_user.is_laboratorist?
   end
 
 end

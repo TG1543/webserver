@@ -1,4 +1,4 @@
-class Api::V1::ProjectsController < ApplicationController
+class Api::V1::ProjectsController <  ApplicationController
   before_action :authenticate_with_token!, only: [:index, :show, :create, :update]
   before_action :is_admin!, only: [:index, :create]
   before_action :is_main_investigator!, only: [:show, :update]
@@ -8,7 +8,7 @@ class Api::V1::ProjectsController < ApplicationController
   respond_to :json
 
   def show
-    respond_with Project.where(id: params[:id]).first#, include: {experiments: { include: :iterations}}
+    respond_with Project.where(id: params[:id]).first, include: :experiments #{experiments: { include: :iterations}}
   end
 
   def index
@@ -40,11 +40,13 @@ class Api::V1::ProjectsController < ApplicationController
 
     def is_authorized!
       if !current_user.is_admin?
+        cors_control_headers
         render json: { errors: "Usuario sin autorización para editar" } if !current_user.projects.where(id: params[:id]).first
       end
     end
 
     def is_canceled!
+      cors_control_headers
       render json: { errors: "El projecto está cancelado" } if Projects.find(params[:id]).is_canceled?
     end
 

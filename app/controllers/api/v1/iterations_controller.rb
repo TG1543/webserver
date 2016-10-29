@@ -11,7 +11,7 @@ class Api::V1::IterationsController < ApplicationController
   end
 
   def show
-    respond_with get_iteration
+    respond_with get_iteration#, include: {:equipment, :plot}
   end
 
   def update
@@ -102,11 +102,13 @@ class Api::V1::IterationsController < ApplicationController
     end
 
     def is_canceled!
+      cors_control_headers
       render json: { errors: "La iteracion está cancelada" } if get_iteration.is_canceled?
     end
 
     def is_authorized!
       if !current_user.is_main_investigator?
+        cors_control_headers
         experiment = get_experiment
         render json: { errors: "Usuario sin autorización." } if !(current_user.experiments.where(id: experiment.id).first ||
                                                   current_user.assign_experiments.where(id: experiment.id).first)

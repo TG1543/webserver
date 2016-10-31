@@ -80,12 +80,12 @@ class Iteration < ApplicationRecord
 
   def cancel
       unassign_equipment
-      update(state_id: State.canceled)
+      update(state_id: State.canceled) if !self.is_finished?
   end
 
   def finish
       unassign_equipment
-      update(state_id: State.finish)
+      update(state_id: State.finish) if !self.is_canceled?
   end
 
 end

@@ -16,16 +16,17 @@ class Api::V1::ProjectsController <  ApplicationController
   end
 
   def create
-    project = Projects.build(project_params)
+    project = Project.new(project_params)
     if project.save
       render json: project, status: 201, location: [:api, project]
     else
+      puts project.errors
       render json: { errors: project.errors }, status: 422
     end
   end
 
   def update
-    project = Projects.where(id: params[:id]).first
+    project = Project.where(id: params[:id]).first
     if project && project.update(project_params)
       render json: project, status: 200, location: [:api, project]
     else
@@ -41,13 +42,13 @@ class Api::V1::ProjectsController <  ApplicationController
     def is_authorized!
       if !current_user.is_admin?
         cors_control_headers
-        render json: { errors: "Usuario sin autorización para editar" } if !current_user.projects.where(id: params[:id]).first
+        render json: { errors: "Usuario sin autorización para editar" }, status: 422 if !current_user.projects.where(id: params[:id]).first
       end
     end
 
     def is_canceled!
       cors_control_headers
-      render json: { errors: "El projecto está cancelado" } if Projects.find(params[:id]).is_canceled?
+      render json: { errors: "El projecto está cancelado" }, status: 422 if Project.find(params[:id]).is_canceled?
     end
 
 end

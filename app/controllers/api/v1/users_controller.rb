@@ -1,10 +1,14 @@
 class Api::V1::UsersController < ApplicationController
-   before_action :authenticate_with_token!, only: [:index, :show, :update, :destroy,:change_role,:toggle_state]
-   before_action :is_admin!, only: [:index,:change_role,:toggle_state]
+   before_action :authenticate_with_token!, only: [:index, :show, :update, :destroy,:change_role,:toggle_state, :project_leaders]
+   before_action :is_admin!, only: [:index,:change_role,:toggle_state,:project_leaders]
    respond_to :json
 
   def index
      respond_with User.all
+  end
+
+  def project_leaders
+    respond_with User.where.not(role_id: 3).where.not(role_id: 4).where.not(role_id: 5)
   end
 
   def show
@@ -62,7 +66,7 @@ class Api::V1::UsersController < ApplicationController
 
     def get_user
       user = current_user
-      user = User.find(params[:id]) if current_user.is_admin?
+      user = User.find_by(id: params[:id]) if current_user.is_admin?
       user
     end
 

@@ -9,20 +9,22 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: :json } do #, constraints: { subdomain: 'api' }, path: '/' do
     scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do
 
-      resources :users, :only => [:index, :show, :create, :update] do
+      controller :projects, path: '/users' do
+        match '/project_leaders', to: 'users#project_leaders', via: [:get, :options], as: :users_project_leaders
+      end
+
+      resources :users, :only => [:index,:show, :create, :update] do
         member do
           patch 'change_role' => 'users#change_role', as: :change_role
           patch 'toggle_state' => 'users#toggle_state', as: :toggle_state
         end
       end
 
-      
-
-      resources :projects, :only => [:create, :update] do
-      end
       controller :projects, path: '/projects' do
         match '/', to: 'projects#index', via: [:get, :options], as: :projects_index
-        match '/:id',to: 'projects#show', via: [:get, :options], as: :project_show
+        match '/',to: 'projects#create', via: [:post, :options], as: :project_create
+        match '/:id',to: 'projects#update', via: [:patch, :options], as: :project_update
+        match '/:id',to: 'projects#show', via: [:get, :options], as: :project
       end
 
       resources :experiments, :only => [:show,:update,:create] do

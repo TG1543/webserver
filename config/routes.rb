@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: :json } do #, constraints: { subdomain: 'api' }, path: '/' do
     scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do
 
-      controller :projects, path: '/users' do
+      controller :users, path: '/users' do
         match '/project_leaders', to: 'users#project_leaders', via: [:get, :options], as: :users_project_leaders
       end
 
@@ -27,7 +27,13 @@ Rails.application.routes.draw do
         match '/:id',to: 'projects#show', via: [:get, :options], as: :project
       end
 
-      resources :experiments, :only => [:show,:update,:create] do
+      controller :experiments, path: '/experiments' do
+        match '/',to: 'experiments#create', via: [:post, :options], as: :experiment_create
+        match '/:id',to: 'experiments#update', via: [:patch, :options], as: :experiment_update
+        match '/:id',to: 'experiments#show', via: [:get, :options], as: :experiment
+      end
+
+      resources :experiments, :only => [] do
         member do
           patch 'add_users_to_experiment' => 'experiments#add_users_to_experiment', as: :add_users_to_experiment
         end

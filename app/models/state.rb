@@ -5,4 +5,7 @@ class State < ApplicationRecord
   def self.canceled
     2
   end
+  def self.finished
+    3
+  end
 end

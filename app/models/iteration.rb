@@ -7,6 +7,8 @@ class Iteration < ApplicationRecord
   has_one :plot
   has_one :equipment
 
+  after_update :_unassign_equipment
+
   def add_comment(comment_params)
     comment = self.binnacles.build(comment_params)
     self.save
@@ -64,6 +66,26 @@ class Iteration < ApplicationRecord
 
   def is_canceled?
       self.state_id.to_s == State.canceled.to_s
+  end
+
+  def is_finished?
+      self.state_id.to_s == State.finished.to_s
+  end
+
+  def _unassign_equipment
+    if (!self.is_canceled? && !self.is_finished?)
+      unassign_equipment
+    end
+  end
+
+  def cancel
+      unassign_equipment
+      update(state_id: State.canceled)
+  end
+
+  def finish
+      unassign_equipment
+      update(state_id: State.finish)
   end
 
 end

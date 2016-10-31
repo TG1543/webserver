@@ -49,6 +49,7 @@ class Api::V1::ProjectsController <  ApplicationController
     def is_canceled!
       cors_control_headers
       render json: { errors: "El projecto está cancelado" }, status: 422 if Project.find(params[:id]).is_canceled?
+      render json: { errors: "El projecto está finalizado" }, status: 422 if Project.find(params[:id]).is_finished?
     end
 
 end

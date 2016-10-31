@@ -8,6 +8,7 @@ Role.create( value: "Usuario")
 #Create states
 State.create(value: "Activo")
 State.create(value: "Cancelado")
+State.create(value: "Finalizado")
 
 #Create results
 Result.create(value: "Exitoso")

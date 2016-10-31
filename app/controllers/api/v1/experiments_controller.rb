@@ -1,15 +1,11 @@
 class Api::V1::ExperimentsController < ApplicationController
-  before_action :authenticate_with_token!, only: [:index, :show, :create, :update, :add_user_to_experiment]
-  before_action :is_main_investigator!, only: [:index, :create, :add_user_to_experiment]
+  before_action :authenticate_with_token!, only: [ :show, :create, :update, :add_user_to_experiment]
+  before_action :is_main_investigator!, only: [ :create, :add_user_to_experiment]
   before_action :is_investigator!, only: [:show, :update]
 
   before_action :is_authorized!, only: [:show, :update]
   before_action :is_canceled!, except: [:index, :show, :create]
   respond_to :json
-
-  def index
-    respond_with Project.find(params[:project_id]).experiments.all
-  end
 
   def show
     respond_with get_experiment, include: :iterations
@@ -44,7 +40,7 @@ class Api::V1::ExperimentsController < ApplicationController
           render json: { errors: experiment.errors }, status: 422
         end
       else
-          render json: { errors: "Usuario sin autorización." }
+          render json: { errors: "Usuario sin autorización." }, status: 422
       end
   end
 
@@ -64,14 +60,14 @@ class Api::V1::ExperimentsController < ApplicationController
 
     def is_canceled!
       cors_control_headers
-      render json: { errors: "El experimento está cancelada" } if get_experiment.is_canceled?
+      render json: { errors: "El experimento está cancelada" }, status: 422 if get_experiment.is_canceled?
     end
 
     def is_authorized!
       if !current_user.is_main_investigator?
         cors_control_headers
         experiment = get_experiment
-        render json: { errors: "Usuario sin autorización." } if !(current_user.experiments.where(id: params[:id]).first ||
+        render json: { errors: "Usuario sin autorización." }, status: 422 if !(current_user.experiments.where(id: params[:id]).first ||
                                                 current_user.assign_experiments.where(id: params[:id]).first)
       end
     end

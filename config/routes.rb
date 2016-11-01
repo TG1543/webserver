@@ -35,8 +35,13 @@ Rails.application.routes.draw do
         match '/:id',to: 'sessions#destroy', via: [:delete, :options], as: :session_destroy
       end
 
+      controller :projects, path: '/iterations' do
+        match '/',to: 'iterations#create', via: [:post, :options], as: :iteration_create
+        match '/:id',to: 'iterations#update', via: [:patch, :options], as: :iteration_update
+        match '/:id',to: 'iterations#show', via: [:get, :options], as: :iteration
+      end
 
-      resources :iterations, :only =>[:show,:update,:create] do
+      resources :iterations, :only =>[] do
         member do
           post 'add_comment' => 'iterations#add_comment', as: :add_comment
           post 'add_plot' => 'iterations#add_plot', as: :add_plot

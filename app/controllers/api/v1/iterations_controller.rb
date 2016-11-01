@@ -24,11 +24,11 @@ class Api::V1::IterationsController < ApplicationController
   end
 
   def create
-    iteration = Iterations.new(iteration_params)
+    iteration = Iteration.new(iteration_params)
     if iteration.save
-      render json: experiment, status: 201, location: [:api, iteration]
+      render json: iteration, status: 201, location: [:api, iteration]
     else
-      render json: { errors: experiment.errors }, status: 422
+      render json: { errors: iteration.errors }, status: 422
     end
   end
 

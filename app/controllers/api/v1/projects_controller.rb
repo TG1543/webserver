@@ -12,6 +12,7 @@ class Api::V1::ProjectsController <  ApplicationController
   end
 
   def index
+    #Arreglar esto para los investigadores
     respond_with Project.all
   end
 

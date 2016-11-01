@@ -4,7 +4,7 @@ class Iteration < ApplicationRecord
   has_many :values
   has_many :binnacles
 
-  has_one :plot
+  has_many :plots
   has_one :equipment
 
   after_update :_unassign_equipment
@@ -38,6 +38,7 @@ class Iteration < ApplicationRecord
   end
 
   def unassign_equipment
+    return true if equipment == nil
     equipment.iteration_id = nil
     values = self.values
     Iteration.transaction do
@@ -85,7 +86,7 @@ class Iteration < ApplicationRecord
 
   def finish
       unassign_equipment
-      update(state_id: State.finish) if !self.is_canceled?
+      update(state_id: State.finished) if !self.is_canceled?
   end
 
 end

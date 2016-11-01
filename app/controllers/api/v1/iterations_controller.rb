@@ -104,6 +104,7 @@ class Api::V1::IterationsController < ApplicationController
     def is_canceled!
       cors_control_headers
       render json: { errors: "La iteracion está cancelada" } if get_iteration.is_canceled?
+      render json: { errors: "La iteracion está finalizada" } if get_iteration.is_finished?
     end
 
     def is_authorized!

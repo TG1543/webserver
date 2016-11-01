@@ -79,7 +79,8 @@ class Api::V1::ExperimentsController < ApplicationController
 
     def is_canceled!
       cors_control_headers
-      render json: { errors: "El experimento está cancelada" }, status: 422 if get_experiment.is_canceled?
+      render json: { errors: "El experimento está cancelado" }, status: 422 if get_experiment.is_canceled?
+      render json: { errors: "El experimento está finalizado" }, status: 422 if get_experiment.is_finished?
     end
 
     def is_authorized!

@@ -15,13 +15,6 @@ Rails.application.routes.draw do
         match '/users_by_experiment/:experiment_id', to: 'users#users_by_experiment', via: [:get, :options], as: :users_by_experiment
       end
 
-      resources :users, :only => [:index,:show, :create, :update] do
-        member do
-          patch 'change_role' => 'users#change_role', as: :change_role
-          patch 'toggle_state' => 'users#toggle_state', as: :toggle_state
-        end
-      end
-
       controller :projects, path: '/projects' do
         match '/', to: 'projects#index', via: [:get, :options], as: :projects_index
         match '/',to: 'projects#create', via: [:post, :options], as: :project_create
@@ -37,6 +30,12 @@ Rails.application.routes.draw do
         match '/:id/remove_user_to_experiment',to: 'experiments#remove_user_to_experiment', via: [:post, :options], as: :remove_user_to_experiment
       end
 
+      controller :sessions, path: '/sessions' do
+        match '/', to: 'sessions#create', via: [:post, :options], as: :sessions_create
+        match '/:id',to: 'sessions#destroy', via: [:delete, :options], as: :session_destroy
+      end
+
+
       resources :iterations, :only =>[:show,:update,:create] do
         member do
           post 'add_comment' => 'iterations#add_comment', as: :add_comment
@@ -46,6 +45,14 @@ Rails.application.routes.draw do
           post 'unassign_equipment' => 'iterations#unassign_equipment', as: :unassign_equipment
         end
       end
+
+      resources :users, :only => [:index,:show, :create, :update] do
+        member do
+          patch 'change_role' => 'users#change_role', as: :change_role
+          patch 'toggle_state' => 'users#toggle_state', as: :toggle_state
+        end
+      end
+
       get 'iterations/index/:experiment_id' => 'iterations#index', as: :iterations_index
 
       resources :equipments, :only => [:index, :show,:update,:create] do
@@ -54,10 +61,7 @@ Rails.application.routes.draw do
         end
       end
 
-      controller :sessions, path: '/sessions' do
-        match '/', to: 'sessions#create', via: [:post, :options], as: :sessions_create
-        match '/:id',to: 'sessions#destroy', via: [:delete, :options], as: :session_destroy
-      end
+
 
     end
   end

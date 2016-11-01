@@ -32,7 +32,6 @@ class Experiment < ApplicationRecord
     elsif self.is_canceled?
       iterations.each {|iteration| iteration.cancel }
     end
-
   end
 
   def cancel

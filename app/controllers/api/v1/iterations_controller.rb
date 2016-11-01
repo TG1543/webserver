@@ -11,7 +11,7 @@ class Api::V1::IterationsController < ApplicationController
   end
 
   def show
-    respond_with get_iteration#, include: {:equipment, :plot}
+    respond_with get_iteration, include: [:binnacles,:equipment,:values]
   end
 
   def update
@@ -19,7 +19,7 @@ class Api::V1::IterationsController < ApplicationController
     if iteration.update(iteration_params)
       render json: experiment, status: 200, location: [:api, iteration]
     else
-      render json: { errors: experiment.errors || "El experimento está cancelado" }, status: 422
+      render json: { errors: iteration.errors || "La iteración está cancelada" }, status: 422
     end
   end
 
@@ -81,7 +81,7 @@ class Api::V1::IterationsController < ApplicationController
 
   private
     def plot_params
-      params.require(:binnacle).permit(:iterations_id,:name,:x_axis,:y_axis)
+      params.require(:plot).permit(:iterations_id,:name,:x_axis,:y_axis)
     end
 
     def comment_params

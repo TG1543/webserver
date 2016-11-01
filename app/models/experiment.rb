@@ -10,12 +10,12 @@ class Experiment < ApplicationRecord
 
   after_update :update_interations
 
-  def add_users(users = [])
-    experiment = self
-    users.each do |user|
-      experiment.user_experiments.build(user)
-    end
-    self.save
+  def add_user(user_id)
+    self.user_experiments.create(user_id: user_id)
+  end
+
+  def remove_user(user_id)
+    self.user_experiments.where(user_id: user_id).last.destroy
   end
 
   def is_canceled?

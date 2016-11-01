@@ -29,13 +29,32 @@ class Api::V1::ExperimentsController < ApplicationController
     end
   end
 
-  def add_users_to_experiment
+  def add_user_to_experiment
       project = get_project
       if (current_user.is_admin? || project.user_id == current_user.id)
         experiment = get_experiment
-        #TODO: Obtener usuarios
-        if experiment.add_users(users)
-          render json: experiment.users, status: 201, location: [:api, experiment]
+        user_id = params[:user_id]
+        if (experiment.users.where(user_experiments: {user_id: user_id}).size == 0)
+          if experiment.add_user(user_id)
+            render json: User.find(user_id), status: 201, location: [:api, experiment]
+          else
+            render json: { errors: experiment.errors }, status: 422
+          end
+        else
+          render json: { errors: "Ya fue agregado el usuario al experimento" }, status: 422
+        end
+      else
+          render json: { errors: "Usuario sin autorización." }, status: 422
+      end
+  end
+
+  def remove_user_to_experiment
+      project = get_project
+      if (current_user.is_admin? || project.user_id == current_user.id)
+        experiment = get_experiment
+        user_id = params[:user_id]
+        if experiment.remove_user(user_id)
+          render json: User.find(user_id), status: 201, location: [:api, experiment]
         else
           render json: { errors: experiment.errors }, status: 422
         end

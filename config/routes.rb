@@ -11,6 +11,8 @@ Rails.application.routes.draw do
 
       controller :users, path: '/users' do
         match '/project_leaders', to: 'users#project_leaders', via: [:get, :options], as: :users_project_leaders
+        match '/researchers', to: 'users#researchers', via: [:get, :options], as: :researchers
+        match '/users_by_experiment/:experiment_id', to: 'users#users_by_experiment', via: [:get, :options], as: :users_by_experiment
       end
 
       resources :users, :only => [:index,:show, :create, :update] do
@@ -31,14 +33,9 @@ Rails.application.routes.draw do
         match '/',to: 'experiments#create', via: [:post, :options], as: :experiment_create
         match '/:id',to: 'experiments#update', via: [:patch, :options], as: :experiment_update
         match '/:id',to: 'experiments#show', via: [:get, :options], as: :experiment
+        match '/:id/add_user_to_experiment',to: 'experiments#add_user_to_experiment', via: [:post, :options], as: :add_user_to_experiment
+        match '/:id/remove_user_to_experiment',to: 'experiments#remove_user_to_experiment', via: [:post, :options], as: :remove_user_to_experiment
       end
-
-      resources :experiments, :only => [] do
-        member do
-          patch 'add_users_to_experiment' => 'experiments#add_users_to_experiment', as: :add_users_to_experiment
-        end
-      end
-      get 'experiments/index/:project_id' => 'experiments#index', as: :experiments_index
 
       resources :iterations, :only =>[:show,:update,:create] do
         member do

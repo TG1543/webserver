@@ -1,5 +1,5 @@
 class Api::V1::UsersController < ApplicationController
-   before_action :authenticate_with_token!, only: [:index, :show, :update, :destroy,:change_role,:toggle_state, :project_leaders]
+   before_action :authenticate_with_token!, only: [:index, :show, :update, :destroy,:change_role,:toggle_state, :project_leaders, :researchers]
    before_action :is_admin!, only: [:index,:change_role,:toggle_state,:project_leaders]
    respond_to :json
 
@@ -9,6 +9,14 @@ class Api::V1::UsersController < ApplicationController
 
   def project_leaders
     respond_with User.where.not(role_id: 3).where.not(role_id: 4).where.not(role_id: 5)
+  end
+
+  def researchers
+    respond_with User.where.not(role_id: 4).where.not(role_id: 5).order(:role_id)
+  end
+
+  def users_by_experiment
+    respond_with User.joins(:user_experiments).where(user_experiments: {experiment_id: params[:experiment_id]})
   end
 
   def show

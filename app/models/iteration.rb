@@ -8,6 +8,8 @@ class Iteration < ApplicationRecord
   has_one :equipment
   validate :validate_experiment
 
+  default_scope { order(created_at: :desc) } 
+
   after_update :_unassign_equipment
 
   def add_comment(comment_params)

@@ -1,6 +1,7 @@
 class Project < ApplicationRecord
    validates :name, :user_id, presence: true
    validates :description, length: { in: 10..255 }
+   default_scope { order(created_at: :desc) }
 
    belongs_to :user
    belongs_to :state

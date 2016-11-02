@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  default_scope { order(created_at: :desc) }
   before_create :generate_authentication_token!
   before_save { self.email = email.downcase }
 

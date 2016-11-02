@@ -8,6 +8,8 @@ class Experiment < ApplicationRecord
   has_many :users, through: :user_experiments
   has_many :iterations, dependent: :destroy
 
+  default_scope { order(created_at: :desc) } 
+
   after_update :update_interations
 
   validate :validate_project

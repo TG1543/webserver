@@ -7,6 +7,7 @@ class Api::V1::ExperimentsController < ApplicationController
   before_action :is_canceled!, except: [:index, :show, :create]
   respond_to :json
 
+
   def show
     respond_with get_experiment, include: :iterations
   end
@@ -91,5 +92,7 @@ class Api::V1::ExperimentsController < ApplicationController
                                                 current_user.assign_experiments.where(id: params[:id]).first)
       end
     end
+
+
 
 end

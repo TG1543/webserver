@@ -93,7 +93,7 @@ class Api::V1::IterationsController < ApplicationController
     end
 
     def get_iteration
-      Iteration.where(id: params[:id]).first
+      Iteration.where(id: params[:id]).first || Iteration.where(id: params[:iteration_id]).first
     end
 
     def get_experiment

@@ -10,6 +10,8 @@ class Experiment < ApplicationRecord
 
   after_update :update_interations
 
+  validate :validate_project
+
   def add_user(user_id)
     self.user_experiments.create(user_id: user_id)
   end
@@ -35,13 +37,17 @@ class Experiment < ApplicationRecord
   end
 
   def cancel
-    update(state_id: State.canceled)
-    iterations.each {|iteration| iteration.cancel } if !self.is_finished?
+    update(state_id: State.canceled) if !self.is_finished?
+    iterations.each {|iteration| iteration.cancel if !iteration.is_finished?} if !self.is_finished?
   end
 
   def finish
-    update(state_id: State.finished)
-    iterations.each {|iteration| iteration.finish } if !self.is_canceled?
+    update(state_id: State.finished) if !self.is_canceled?
+    iterations.each {|iteration| iteration.finish if !iteration.is_canceled? } if !self.is_canceled?
+  end
+  private
+  def validate_project
+    errors.add(:project,"El proyecto está cancelado") if self.project.is_canceled?
   end
 
 end

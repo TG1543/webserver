@@ -6,6 +6,7 @@ class Iteration < ApplicationRecord
 
   has_many :plots
   has_one :equipment
+  validate :validate_experiment
 
   after_update :_unassign_equipment
 
@@ -88,5 +89,11 @@ class Iteration < ApplicationRecord
       unassign_equipment
       update(state_id: State.finished) if !self.is_canceled?
   end
+
+  private
+
+    def validate_experiment
+         errors.add(:experiment,"El experimento está cancelado") if self.experiment.is_canceled?
+    end
 
 end

@@ -4,7 +4,7 @@ class Project < ApplicationRecord
 
    belongs_to :user
    belongs_to :state
-   has_many :experiments
+   has_many :experiments, dependent: :destroy
 
    after_update :cancel_experiments
    after_update :finish_experiments

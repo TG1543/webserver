@@ -6,7 +6,7 @@ class Experiment < ApplicationRecord
 
   has_many :user_experiments
   has_many :users, through: :user_experiments
-  has_many :iterations
+  has_many :iterations, dependent: :destroy
 
   after_update :update_interations
 

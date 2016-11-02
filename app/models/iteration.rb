@@ -1,10 +1,10 @@
 class Iteration < ApplicationRecord
   belongs_to :experiment
 
-  has_many :values
-  has_many :binnacles
+  has_many :values, dependent: :destroy
+  has_many :binnacles, dependent: :destroy
 
-  has_many :plots
+  has_many :plots, dependent: :destroy
   has_one :equipment
   validate :validate_experiment
 

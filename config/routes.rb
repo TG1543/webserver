@@ -23,6 +23,7 @@ Rails.application.routes.draw do
       end
 
       controller :experiments, path: '/experiments' do
+        match '/assigned_experiments',to: 'experiments#assigned_experiments', via: [:get, :options], as: :assigned_experiments
         match '/',to: 'experiments#create', via: [:post, :options], as: :experiment_create
         match '/:id',to: 'experiments#update', via: [:patch, :options], as: :experiment_update
         match '/:id',to: 'experiments#show', via: [:get, :options], as: :experiment

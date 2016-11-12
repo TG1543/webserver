@@ -112,7 +112,7 @@ class Api::V1::IterationsController < ApplicationController
         cors_control_headers
         experiment = get_experiment
         render json: { errors: "Usuario sin autorización." } if !(current_user.experiments.where(id: experiment.id).first ||
-                                                  current_user.assign_experiments.where(id: experiment.id).first)
+                                                  current_user.assigned_experiments.where(id: experiment.id).first)
       end
     end
 end

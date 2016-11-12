@@ -4,12 +4,16 @@ class Api::V1::ExperimentsController < ApplicationController
   before_action :is_investigator!, only: [:show, :update]
 
   before_action :is_authorized!, only: [:show, :update]
-  before_action :is_canceled!, except: [:index, :show, :create]
+  before_action :is_canceled!, except: [:index, :show, :create, :assigned_experiments]
   respond_to :json
 
 
   def show
     respond_with get_experiment, include: :iterations
+  end
+
+  def assigned_experiments
+      respond_with current_user.assigned_experiments, include: :iterations
   end
 
   def update
@@ -89,7 +93,7 @@ class Api::V1::ExperimentsController < ApplicationController
         cors_control_headers
         experiment = get_experiment
         render json: { errors: "Usuario sin autorización." }, status: 422 if !(current_user.experiments.where(id: params[:id]).first ||
-                                                current_user.assign_experiments.where(id: params[:id]).first)
+                                                current_user.assigned_experiments.where(id: params[:id]).first)
       end
     end
 

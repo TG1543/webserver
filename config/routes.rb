@@ -44,11 +44,11 @@ Rails.application.routes.draw do
       end
 
       controller :equipments, path: '/equipments' do
+        match '/:id/toggle_state',to: 'equipments#toggle_state', via: [:patch, :options], as: :equipment_toggle_state
         match '/', to: 'equipments#index', via: [:get, :options], as: :equipments_index
         match '/',to: 'equipments#create', via: [:post, :options], as: :equipments_create
         match '/:id',to: 'equipments#update', via: [:patch, :options], as: :equipments_update
         match '/:id',to: 'equipments#show', via: [:get, :options], as: :equipment
-        match '/:id/toggle_state',to: 'equipments#toggle_state', via: [:patch, :options], as: :equipment_toggle_state
       end
 
       resources :iterations, :only =>[] do

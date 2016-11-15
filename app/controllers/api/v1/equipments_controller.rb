@@ -23,7 +23,7 @@ class Api::V1::EquipmentsController < ApplicationController
 
   def update
     equipment = get_equipment
-    if equipment.update(project_params)
+    if equipment.update(equipment_params)
       render json: equipment, status: 200, location: [:api, equipment]
     else
       render json: { errors: equipment.errors }, status: 422
@@ -33,10 +33,10 @@ class Api::V1::EquipmentsController < ApplicationController
   def toggle_state
     equipment = get_equipment
     equipment.active = !equipment.active
-    if user.save
-      render json: user, status: 200, location: [:api, equipment]
+    if !equipment.iteration_id && equipment.save
+      render json: equipment, status: 200, location: [:api, equipment]
     else
-      render json: { errors: user.errors }, status: 422
+      render json: { errors: equipment.errors || "Tiene una iteración asignada."}, status: 422
     end
   end
 

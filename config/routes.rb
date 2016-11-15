@@ -43,6 +43,14 @@ Rails.application.routes.draw do
         match '/:id',to: 'iterations#show', via: [:get, :options], as: :iteration
       end
 
+      controller :equipments, path: '/equipments' do
+        match '/', to: 'equipments#index', via: [:get, :options], as: :equipments_index
+        match '/',to: 'equipments#create', via: [:post, :options], as: :equipments_create
+        match '/:id',to: 'equipments#update', via: [:patch, :options], as: :equipments_update
+        match '/:id',to: 'equipments#show', via: [:get, :options], as: :equipment
+        match '/:id/toggle_state',to: 'equipments#toggle_state', via: [:patch, :options], as: :equipment_toggle_state
+      end
+
       resources :iterations, :only =>[] do
         member do
           post 'add_plot' => 'iterations#add_plot', as: :add_plot
@@ -60,14 +68,6 @@ Rails.application.routes.draw do
       end
 
       get 'iterations/index/:experiment_id' => 'iterations#index', as: :iterations_index
-
-      resources :equipments, :only => [:index, :show,:update,:create] do
-        member do
-          patch 'toggle_state' => 'equipments#toggle_state', as: :toggle_state
-        end
-      end
-
-
 
     end
   end

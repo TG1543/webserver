@@ -28,7 +28,7 @@ class Iteration < ApplicationRecord
 
   def assign_equipment(equipment_id)
     equipment = Equipment.where(id: equipment_id).first
-    return false unless equipment && equipment.is_active?
+    return false unless equipment && equipment.is_active? && !equipment.iteration_id
     equipment.iteration_id = self.id
     values = self.values
     Iteration.transaction do

@@ -42,6 +42,8 @@ Rails.application.routes.draw do
         match '/',to: 'iterations#create', via: [:post, :options], as: :iteration_create
         match '/:id',to: 'iterations#update', via: [:patch, :options], as: :iteration_update
         match '/:id',to: 'iterations#show', via: [:get, :options], as: :iteration
+        match '/:id/assign_equipment',to: 'iterations#assign_equipment', via: [:post, :options], as: :assign_equipment
+        match '/:id/unassign_equipment',to: 'iterations#unassign_equipment', via: [:post, :options], as: :unassign_equipment
       end
 
       controller :equipments, path: '/equipments' do
@@ -59,8 +61,6 @@ Rails.application.routes.draw do
       resources :iterations, :only =>[] do
         member do
           post 'add_plot' => 'iterations#add_plot', as: :add_plot
-          post 'assign_equipment' => 'iterations#assign_equipment', as: :assign_equipment
-          post 'unassign_equipment' => 'iterations#unassign_equipment', as: :unassign_equipment
         end
       end
 

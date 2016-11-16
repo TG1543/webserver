@@ -71,8 +71,9 @@ class Api::V1::IterationsController < ApplicationController
 
   def add_values_to_equipment
     iteration = get_iteration
+
     values = params[:values]
-    if iteration.add_values_to_parameter(values)
+    if iteration.add_values_to_equipment(values)
         render json: iteration, status: 201, location: [:api,iteration]
     else
         render json: {  errors: "No se asignaron los valores de los parámetros al equipo."}, status: 422

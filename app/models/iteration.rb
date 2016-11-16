@@ -8,7 +8,7 @@ class Iteration < ApplicationRecord
   has_one :equipment
   validate :validate_experiment
 
-  default_scope { order(created_at: :desc) } 
+  default_scope { order(created_at: :desc) }
 
   after_update :_unassign_equipment
 
@@ -55,17 +55,18 @@ class Iteration < ApplicationRecord
 
   def add_values_to_equipment(values)
     Value.transaction do
-      values.each do |value|
-        self.add_value_to_parameter(value.parameter_id,value.quantity)
+      values.each do |key,value|
+        self.add_value_to_parameter(value["parameter_id"],value["quantity"])
       end
+      self.save
     end
   end
 
   def add_value_to_parameter(parameter_id,quantity)
-      value = Value.where(parameter_id: parameter_id,iteration_id: self.id).first
-      value.quantity = quantity if value
-      value = self.values.build(parameter_id: parameter_id, quantity: quantity) unless value
-      value.save
+    value = Value.where(parameter_id: parameter_id,iteration_id: self.id).first
+    value.quantity = quantity if value
+    value = self.values.build(parameter_id: parameter_id, quantity: quantity) unless value
+    value.save
   end
 
   def is_canceled?

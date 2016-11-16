@@ -4,7 +4,7 @@ class Api::V1::ParametersController < ApplicationController
   respond_to :json
 
   def index
-    respond_with Parameter.joins('LEFT JOIN values ON "values"."iteration_id" = ' + params[:iteration_id].to_s ).select(:id,:name,:quantity)
+    respond_with Parameter.joins('LEFT JOIN values ON "parameters"."id" = "values"."parameter_id" AND "values"."iteration_id" = '+ params[:iteration_id]).select(:id,:name,:quantity)
   end
 
 end

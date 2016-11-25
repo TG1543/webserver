@@ -38,6 +38,7 @@ Rails.application.routes.draw do
 
       controller :iterations, path: '/iterations' do
         match '/add_values_to_equipment',to: 'iterations#add_values_to_equipment', via: [:post, :options], as: :add_values_to_equipment
+        match '/add_plot',to: 'iterations#add_plot', via: [:post, :options], as: :add_plot
         match '/add_comment',to: 'iterations#add_comment', via: [:post, :options], as: :iteration_add_comment
         match '/',to: 'iterations#create', via: [:post, :options], as: :iteration_create
         match '/:id',to: 'iterations#update', via: [:patch, :options], as: :iteration_update
@@ -58,20 +59,14 @@ Rails.application.routes.draw do
         match '/', to: 'parameters#index', via: [:get, :options], as: :parameters_index
       end
 
-      resources :iterations, :only =>[] do
-        member do
-          post 'add_plot' => 'iterations#add_plot', as: :add_plot
-        end
+      controller :users, path: '/equipments' do
+        match '/:id/change_role',to: 'users#change_role', via: [:patch, :options], as: :user_change_role
+        match '/:id/toggle_state',to: 'users#toggle_state', via: [:patch, :options], as: :user_toggle_state
+        match '/', to: 'users#index', via: [:get, :options], as: :users_index
+        match '/',to: 'users#create', via: [:post, :options], as: :users_create
+        match '/:id',to: 'users#update', via: [:patch, :options], as: :users_update
+        match '/:id',to: 'users#show', via: [:get, :options], as: :user
       end
-
-      resources :users, :only => [:index,:show, :create, :update] do
-        member do
-          patch 'change_role' => 'users#change_role', as: :change_role
-          patch 'toggle_state' => 'users#toggle_state', as: :toggle_state
-        end
-      end
-
-      get 'iterations/index/:experiment_id' => 'iterations#index', as: :iterations_index
 
     end
   end
